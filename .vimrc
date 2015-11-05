@@ -22,6 +22,9 @@ match ExtraWhitespace /\s\+$/
 " Show me a ruler
 set ruler
 
+" Highlight search results
+set hlsearch
+
 " ****************************************************************************
 " Misc Stuff
 " ****************************************************************************
