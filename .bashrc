@@ -108,6 +108,19 @@ source $HOME/bin/promptline.sh
 #fi
 #export PS1
 
+# choose which version of terraform to use
+function ut () {
+  if [ -z "$1" ]; then
+    echo "must specify which version that corresponds to a binary, the arg '11' would correspond to ~/bin/terraform11"
+  else
+    if [ -e "${HOME}/bin/terraform${1}" ]; then
+      ln -sF ${HOME}/bin/terraform${1} ${HOME}/bin/terraform; terraform --version | head -n1
+    else
+      echo "${HOME}/bin/terraform${1} does not exist"
+    fi
+  fi
+}
+
 # sensu
 function sensuclients {
   curl -s http://admin:secret@127.0.0.1:4567/clients | jq .[].name | awk -F \" '{print $2}' | awk -F \. '{print $1}' | sort
