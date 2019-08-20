@@ -14,9 +14,14 @@ export SVN_EDITOR='vim'
 export EDITOR='vim'
 export VISUAL='vim'
 
-export CVSROOT=:ext:ghoneycutt@cvs.speakeasy.net:/usr/local/cvs/master
+# EC2 tools
+export JAVA_HOME=/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/
+export EC2_HOME=/Users/gh/amazon/ec2-api-tools
+
+# aws tab completion
+complete -C /opt/local/Library/Frameworks/Python.framework/Versions/3.4/bin/aws_completer aws
+
 export CVS_RSH=/usr/bin/ssh
-export LOCAL_PUPPETREPO_PATH=/home/gh/puppet
 
 # List of suffixes to ignore when performing filename completion
 export FIGNORE=".svn:.o:~"
@@ -31,19 +36,33 @@ export MYVIMDIR="$HOME/.vim/"
 # Do not create ._ metadata files on Mac OSX
 export COPYFILE_DISABLE=true
 
+# Go
+export GOPATH=$HOME/go
+export GOROOT=$HOME/goroot
+
 #-----------------------------------------------------------------------------
 # Aliases
 #-----------------------------------------------------------------------------
 
 alias diff="colordiff -Naur"
 alias less="less -R -i -E -M -X $@"
-alias vi="vim"
+alias vi="/opt/local/bin/vim"
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 alias ls='ls -G' # colorized output
 alias top='top -o cpu' # OSX's crazy top
 alias rspec='rspec -c' # colorized rspec output
+alias grep='grep --color=auto'
+alias tree="tree -a -I .git $@"
+alias bi='bundle install'
+alias be="bundle exec $@"
+alias berc='bundle exec rake spec_clean spec_prep'
+alias berp='bundle exec rake validate lint spec_standalone'
+alias gc="git cherry-pick $@"
+alias gpum='git checkout master && git pull upstream master'
+alias telnet='gtelnet'
+alias g="gcloud $@"
 
 #-----------------------------------------------------------------------------
 # Global Settings
@@ -52,6 +71,8 @@ alias rspec='rspec -c' # colorized rspec output
 # Save all lines of a multiple-line command in the same history entry
 shopt -s cmdhist
 
+HISTFILESIZE=2500
+
 #-----------------------------------------------------------------------------
 # Initialization
 #-----------------------------------------------------------------------------
@@ -59,23 +80,46 @@ shopt -s cmdhist
 # Source some subversion specific functions
 source $HOME/.svn_bash_completion
 
+#source git bash completion
+source $HOME/.git_bash_completion
+
+source $HOME/.iterm2_shell_integration.bash
+
 # Import our custom file/directory colors
-eval `dircolors -b $HOME/.dir_colors`
+eval `/opt/local/bin/gdircolors -b $HOME/.dir_colors`
+
+# Google gcloud
+source $HOME/google-cloud-sdk/completion.bash.inc
+source $HOME/google-cloud-sdk/path.bash.inc
 
 #-----------------------------------------------------------------------------
 # Misc. Custom Functions
 #-----------------------------------------------------------------------------
 
-# change prompt when using git
-function parse_git_branch {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1) /'
+source $HOME/bin/promptline.sh
+## change prompt when using git
+#function parse_git_branch {
+#  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1) /'
+#}
+#if [ $EUID == '0' ]; then
+#  PS1="\[\e[32m\]\$(parse_git_branch)\[\e[m\]\h:\W # "
+#else
+#  PS1="\[\e[32m\]\$(parse_git_branch)\[\e[m\]\h:\W\$ "
+#fi
+#export PS1
+
+# sensu
+function sensuclients {
+  curl -s http://admin:secret@127.0.0.1:4567/clients | jq .[].name | awk -F \" '{print $2}' | awk -F \. '{print $1}' | sort
 }
-if [ $EUID == '0' ]; then
-  PS1="\[\e[32m\]\$(parse_git_branch)\[\e[m\]\h:\W # "
-else
-  PS1="\[\e[32m\]\$(parse_git_branch)\[\e[m\]\h:\W\$ "
-fi
-export PS1
+# sensu2
+function sclients {
+  sensuctl entity list --format json | jq .[].id | sort
+}
+# sensu2 - delete all clients
+function dclients {
+  for i in $(sclients |awk -F \" '{print $2}'); do sensuctl entity delete --skip-confirm $i 2>/dev/null; done
+}
 
 # display cert info
 function certinfo () { openssl x509 -in $1 -noout -text; }
@@ -83,11 +127,43 @@ function certinfo () { openssl x509 -in $1 -noout -text; }
 # display CSR info
 function csrinfo () { openssl asn1parse -in $1; }
 
+function vsh () { vagrant ssh; }
+
 # colorized svn diffs
 function svndiff () { svn diff $@ | colordiff; }
 
 # colorized git diffs
 function gitdiff () { git diff $@ | colordiff; }
+
+# find modules in use
+function fm()
+{
+  if [ -z $1 ]; then
+    find . -type f -name Modulefile
+  else
+    find $1 -type f -name Modulefile
+  fi
+}
+
+# find names of modules in use
+function fmn()
+{
+  if [ -z $1 ]; then
+    find . -type f -name Modulefile | xargs grep name |grep -v \# | awk '{print $2}' | awk -F \' '{print $2}'
+  else
+    find $1 -type f -name Modulefile | xargs grep name |grep -v \# | awk '{print $2}' | awk -F \' '{print $2}'
+  fi
+}
+
+# puppet lint
+function pl()
+{
+    if [ -z $1 ]; then
+      puppet lint init.pp
+    else
+      puppet lint $1
+    fi
+}
 
 # puppet template syntax checking
 function pt()
@@ -103,9 +179,9 @@ function pt()
 function pc()
 {
     if [ -z $1 ]; then
-        puppet --ignoreimport --parseonly init.pp
+        puppet parser validate init.pp
     else
-        puppet --ignoreimport --parseonly $1
+        puppet parser validate $1
     fi
 }
 
@@ -228,3 +304,15 @@ function my_ps() { ps $@ -u $USER -o pid,%cpu,%mem,bsdtime,command ; }
 # Show all processes owned by me
 function pp() { my_ps f | awk '!/awk/ && $0~var' var=${1:-".*"} ; }
 
+
+
+### Added by the Heroku Toolbelt
+export PATH="/usr/local/heroku/bin:$PATH"
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+# https://direnv.net/
+eval "$(direnv hook bash)"
+
+# added by travis gem
+[ -f /Users/gh/.travis/travis.sh ] && source /Users/gh/.travis/travis.sh
