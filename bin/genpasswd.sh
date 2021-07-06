@@ -8,13 +8,13 @@
 #
 # Usage: genpasswd.sh [minum password length] [maximum password length]
 #
-# Notes: uses 10 as the default for min/max. Min has to be at least 4.
+# Notes: uses 10 as the default for min/max. Min has to be at least 4. 
 
-APG="/opt/local/bin/apg"
+APG="/usr/local/bin/apg"
 
 # set defaults
-MIN=10
-MAX=10
+MIN=20
+MAX=20
 
 # if only min is specified, use it and set max to the same number
 if [ $# -eq 1 ]; then
