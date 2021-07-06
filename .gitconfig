@@ -1,6 +1,25 @@
-[user]
-	email = garrett@puppetlabs.com
-	name = ghoneycutt
+#[user]
+#  email =
+#  name =
+#  signingkey =
 
 [color]
-    ui = auto
+  ui = auto
+
+[core]
+  pager = less
+
+[pager]
+  status = false
+  branch = false
+  tag = false
+[filter "lfs"]
+  required = true
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+
+[commit]
+  gpgsign = true
+[pull]
+	rebase = false

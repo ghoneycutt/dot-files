@@ -19,7 +19,7 @@ export JAVA_HOME=/Library/Internet\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Ho
 export EC2_HOME=/Users/gh/amazon/ec2-api-tools
 
 # aws tab completion
-complete -C /opt/local/Library/Frameworks/Python.framework/Versions/3.4/bin/aws_completer aws
+#complete -C /opt/local/Library/Frameworks/Python.framework/Versions/3.4/bin/aws_completer aws
 
 export CVS_RSH=/usr/bin/ssh
 
@@ -40,13 +40,16 @@ export COPYFILE_DISABLE=true
 export GOPATH=$HOME/go
 export GOROOT=$HOME/goroot
 
+# https://consoledonottrack.com/
+export DO_NOT_TRACK=1
+
 #-----------------------------------------------------------------------------
 # Aliases
 #-----------------------------------------------------------------------------
 
 alias diff="colordiff -Naur"
 alias less="less -R -i -E -M -X $@"
-alias vi="/opt/local/bin/vim"
+alias vi="/usr/local/bin/vim"
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -60,8 +63,7 @@ alias be="bundle exec $@"
 alias berc='bundle exec rake spec_clean spec_prep'
 alias berp='bundle exec rake validate lint spec_standalone'
 alias gc="git cherry-pick $@"
-alias gpum='git checkout master && git pull upstream master'
-alias telnet='gtelnet'
+#alias gpum='git checkout master && git pull upstream master'
 alias g="gcloud $@"
 
 #-----------------------------------------------------------------------------
@@ -86,7 +88,7 @@ source $HOME/.git_bash_completion
 source $HOME/.iterm2_shell_integration.bash
 
 # Import our custom file/directory colors
-eval `/opt/local/bin/gdircolors -b $HOME/.dir_colors`
+eval `/usr/local/bin/gdircolors -b $HOME/.dir_colors`
 
 # Google gcloud
 source $HOME/google-cloud-sdk/completion.bash.inc
@@ -108,19 +110,6 @@ source $HOME/bin/promptline.sh
 #fi
 #export PS1
 
-# choose which version of terraform to use
-function ut () {
-  if [ -z "$1" ]; then
-    echo "must specify which version that corresponds to a binary, the arg '11' would correspond to ~/bin/terraform11"
-  else
-    if [ -e "${HOME}/bin/terraform${1}" ]; then
-      ln -sF ${HOME}/bin/terraform${1} ${HOME}/bin/terraform; terraform --version | head -n1
-    else
-      echo "${HOME}/bin/terraform${1} does not exist"
-    fi
-  fi
-}
-
 # sensu
 function sensuclients {
   curl -s http://admin:secret@127.0.0.1:4567/clients | jq .[].name | awk -F \" '{print $2}' | awk -F \. '{print $1}' | sort
@@ -139,6 +128,13 @@ function certinfo () { openssl x509 -in $1 -noout -text; }
 
 # display CSR info
 function csrinfo () { openssl asn1parse -in $1; }
+
+# show all certs for a target. Target is in the form hostname:port
+function certdns ()
+{
+    local target=$1;
+    openssl s_client -showcerts -connect ${target} < /dev/null 2>&1 | openssl x509 -noout -text | gsed -rn '/DNS/{s/[ \t]+//g;s/,/\n/g;s/:/ = /pg}' | sort -h
+}
 
 function vsh () { vagrant ssh; }
 
