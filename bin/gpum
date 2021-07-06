@@ -1,0 +1,4 @@
+#!/bin/bash
+
+HEAD_BRANCH=$(git remote show upstream | grep 'HEAD branch' | cut -d' ' -f5)
+git checkout ${HEAD_BRANCH} && git pull upstream ${HEAD_BRANCH}
