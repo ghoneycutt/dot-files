@@ -3,6 +3,10 @@
 # install brew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+# nerd fonts
+brew tap homebrew/cask-fonts
+brew install --cask font-hack-nerd-font
+
 # apg
 brew tap jzaleski/homebrew-jzaleski
 brew install apg
