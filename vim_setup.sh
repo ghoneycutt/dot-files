@@ -6,10 +6,10 @@ cp -vafR .vim ~
 
 # install pathogen
 mkdir -p ~/.vim/autoload ~/.vim/bundle && \
-curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+	curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
 # install bundles
-cd ~/.vim/bundle
+cd ~/.vim/bundle || exit
 
 git clone https://github.com/martinda/Jenkinsfile-vim-syntax.git
 git clone https://github.com/w0rp/ale.git
@@ -33,5 +33,8 @@ git clone https://github.com/hashivim/vim-terraform.git
 git clone https://github.com/hashivim/vim-vagrant.git
 git clone https://github.com/hashivim/vim-vaultproject.git
 git clone https://github.com/sheerun/vim-polyglot.git
+
+# setup prompt
+cp darkjelly.vim ~/.vim/bundle/promptline/autoload/promptline/themes/
 
 cd -
