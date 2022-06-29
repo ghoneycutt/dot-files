@@ -22,16 +22,16 @@ git clone https://github.com/PProvost/vim-ps1.git
 git clone https://github.com/rodjek/vim-puppet.git
 git clone https://github.com/mhinz/vim-signify.git
 git clone https://github.com/leafgarland/typescript-vim.git
-git clone https://github.com/vim-airline/vim-airline
-git clone https://github.com/vim-airline/vim-airline-themes
-git clone git@github.com:hashivim/vim-consul
+git clone https://github.com/vim-airline/vim-airline.git
+git clone https://github.com/vim-airline/vim-airline-themes.git
+git clone https://github.com/hashivim/vim-consul.git
 git clone https://github.com/hashivim/vim-hashicorp-tools.git
-git clone git@github.com:hashivim/vim-nomadproject
-git clone git@github.com:hashivim/vim-ottoproject
-git clone git@github.com:hashivim/vim-packer
-git clone git@github.com:hashivim/vim-terraform
-git clone git@github.com:hashivim/vim-vagrant
-git clone git@github.com:hashivim/vim-vaultproject
+git clone https://github.com/hashivim/vim-nomadproject.git
+git clone https://github.com/hashivim/vim-ottoproject.git
+git clone https://github.com/hashivim/vim-packer.git
+git clone https://github.com/hashivim/vim-terraform.git
+git clone https://github.com/hashivim/vim-vagrant.git
+git clone https://github.com/hashivim/vim-vaultproject.git
 git clone https://github.com/sheerun/vim-polyglot.git
 
 cd -
