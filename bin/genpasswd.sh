@@ -10,7 +10,7 @@
 #
 # Notes: uses 10 as the default for min/max. Min has to be at least 4. 
 
-APG="/usr/local/bin/apg"
+APG="apg"
 
 # set defaults
 MIN=20
@@ -30,12 +30,12 @@ fi
 
 # must be at least 4 characters wide to comply with strictness,
 # else set to 4
-if [ $MIN -lt 4 ]; then
+if [ "$MIN" -lt 4 ]; then
     MIN=4
 fi
 
 # check that max is also 4 characters wide, else set to MIN
-if [ $MAX -lt 4 ]; then
+if [ "$MAX" -lt 4 ]; then
     MAX=$MIN
 fi
 
