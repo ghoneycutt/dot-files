@@ -24,6 +24,7 @@ brew install git
 brew install gnupg
 brew install jq
 brew install nmap
+brew install pinentry-mac
 brew install pssh
 brew install telnet
 brew install tree
