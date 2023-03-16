@@ -1,4 +1,11 @@
 #!/bin/bash
 
-HEAD_BRANCH=$(git remote show upstream | grep 'HEAD branch' | cut -d' ' -f5)
-git checkout "${HEAD_BRANCH}" && git pull upstream "${HEAD_BRANCH}"
+# Do we have an upstream? If not, just do a 'git pull'
+git remote | grep upstream 1>/dev/null
+# shellcheck disable=SC2181
+if [[ $? -eq 0 ]]; then
+    HEAD_BRANCH=$(git remote show upstream | grep 'HEAD branch' | cut -d' ' -f5)
+    git checkout "${HEAD_BRANCH}" && git pull upstream "${HEAD_BRANCH}"
+else
+    git pull
+fi
