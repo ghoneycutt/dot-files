@@ -22,10 +22,12 @@ brew install curl
 brew install direnv
 brew install git
 brew install gnupg
+brew install gnu-sed
 brew install jq
 brew install nmap
 brew install pinentry-mac
 brew install pssh
+brew install shfmt
 brew install telnet
 brew install tree
 brew install vim
