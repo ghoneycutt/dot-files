@@ -1,12 +1,14 @@
-#!/bin/bash
+#!/bin/bash -xe
 
-# copy from dotfiles
-cp .vimrc ~
-cp -vafR .vim ~
+# backup then copy from dotfiles
+cp "${HOME}/.vimrc" "$HOME/.vimrc-$(date -I)"
+cp .vimrc "${HOME}/.vimrc"
+mv "${HOME}/.vim" "${HOME}/.vim-$(date -I)"
+cp -vafR .vim "${HOME}/.vim"
 
 # install pathogen
-mkdir -p ~/.vim/autoload ~/.vim/bundle &&
-	curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
+mkdir -p "${HOME}/.vim/autoload" "${HOME}/.vim/bundle"
+curl -LSso "${HOME}/.vim/autoload/pathogen.vim" https://tpo.pe/pathogen.vim
 
 # install bundles
 cd ~/.vim/bundle || exit
@@ -35,6 +37,7 @@ git clone https://github.com/hashivim/vim-vaultproject.git
 git clone https://github.com/sheerun/vim-polyglot.git
 
 # setup prompt
-cp darkjelly.vim ~/.vim/bundle/promptline/autoload/promptline/themes/
+# See https://github.com/edkolev/promptline.vim for more info
+cp darkjelly.vim "${HOME}/.vim/bundle/promptline/autoload/promptline/themes/"
 
 cd - || exit
