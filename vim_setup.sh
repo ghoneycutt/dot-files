@@ -5,7 +5,7 @@ cp .vimrc ~
 cp -vafR .vim ~
 
 # install pathogen
-mkdir -p ~/.vim/autoload ~/.vim/bundle && \
+mkdir -p ~/.vim/autoload ~/.vim/bundle &&
 	curl -LSso ~/.vim/autoload/pathogen.vim https://tpo.pe/pathogen.vim
 
 # install bundles
@@ -37,4 +37,4 @@ git clone https://github.com/sheerun/vim-polyglot.git
 # setup prompt
 cp darkjelly.vim ~/.vim/bundle/promptline/autoload/promptline/themes/
 
-cd -
+cd - || exit
